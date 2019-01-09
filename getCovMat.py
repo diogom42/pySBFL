@@ -1,3 +1,5 @@
+import csv
+
 def getCovMat(prog, v, testSize):
     outputs = open(prog + '/outputs.txt', 'r').read().splitlines()
 
@@ -23,7 +25,10 @@ def getCovMat(prog, v, testSize):
         # se for negativo append '-', senao, append '+'
         covMat[-1].append('-' if t in failed else '+')
 
-    print(covMat)
+    return covMat
 
-# versions = open(prog + '/versions', 'r').read().splitlines()
-getCovMat('45-A', 2, 25)
+matrix = getCovMat('45-A', 2, 25)
+
+with open("output.csv", "w") as f:
+    writer = csv.writer(f)
+    writer.writerows(matrix)
