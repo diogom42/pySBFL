@@ -52,7 +52,7 @@ class Spectrum:
         self.pTests = list()
 
         matrixFile = open(programDir + program + '/' + str(ver) + '/matrix', 'r')
-        CovMat = list(csv.reader(matrixFile, delimiter=' '))  # append all lines as a list
+        CovMat = list(csv.reader(matrixFile, delimiter=','))  # append all lines as a list
         matrixFile.close()
 
         for j in range(len(CovMat)):  # iterate over number of tests

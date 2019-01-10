@@ -27,8 +27,11 @@ def getCovMat(prog, v, testSize):
 
     return covMat
 
-matrix = getCovMat('45-A', 2, 25)
+prog = '45-A'
+ver = 3
 
-with open("output.csv", "w") as f:
+matrix = getCovMat(prog, ver, 25)
+
+with open(prog + '/v' + str(ver) + '/matrix', 'w') as f:
     writer = csv.writer(f)
     writer.writerows(matrix)
