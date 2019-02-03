@@ -6,7 +6,7 @@ def getCovMat(prog, v, testSize):
     covMat = list()
 
     #identificva indice dos testes negativos da versao
-    comp = open(prog + '/compv' + str(v), 'r').read().splitlines()
+    comp = open(prog + '/comp' + str(v), 'r').read().splitlines()
     failed = list()
     for c in comp:
         failed.append(outputs.index(c))
@@ -16,7 +16,7 @@ def getCovMat(prog, v, testSize):
         covMat.append(list())
 
         #abre um novo arquivo de trace
-        with open(prog + '/v' + str(v) +'/traces/trace' + str(t + 1) + '.info', 'r') as trace:
+        with open(prog + '/' + str(v) +'/traces/trace' + str(t + 1) + '.info', 'r') as trace:
             lines = trace.read().splitlines()
             for line in lines:
                 line = line.replace(':', ',').split(',')
@@ -27,11 +27,22 @@ def getCovMat(prog, v, testSize):
 
     return covMat
 
-prog = '45-A'
-ver = 3
+def runList():
+    progList = open('A', 'r').read().splitlines()
 
-matrix = getCovMat(prog, ver, 25)
+    for prog in progList:
+        print(prog)
+        verList = open(prog + '/versions', 'r').read().splitlines()
+	numTests = len(open(prog + '/universe', 'r').read().splitlines())
+    
+        for ver in verList:
+            matrix = getCovMat(prog, ver, numTests)
+            with open(prog + '/' + str(ver) + '/matrix', 'w') as f:
+                writer = csv.writer(f)
+                writer.writerows(matrix)
+        
 
-with open(prog + '/v' + str(ver) + '/matrix', 'w') as f:
-    writer = csv.writer(f)
-    writer.writerows(matrix)
+runList()
+
+#prog = '45-A'
+#ver = '45-A-bug-3422457-3422477'
