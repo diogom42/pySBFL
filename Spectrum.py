@@ -14,7 +14,10 @@ class Spectrum:
 
         self.tests = len(self.pTests) + len(self.nTests)
 
-        self.lines = len(self.pTests[0])
+        self.lines = 0
+        if len(self.pTests) != 0: self.lines = len(self.pTests[0])
+        if self.lines == 0 and len(self.nTests) != 0:
+            self.lines = len(self.nTests[0])
 
         self.ep = self.EPs()
         self.ef = self.EFs()
@@ -210,7 +213,7 @@ class Spectrum:
             EP = self.ep[line]
             EF = self.ef[line]
             NF = self.nf[line]
-            metric.append(EF / max(EF + EP, EF + NF))
+            metric.append(EF / sys.float_info.min if max(EF + EP, EF + NF) == 0 else max(EF + EP, EF + NF))
         return metric
 
     def m2(self):  # Dennis
@@ -265,8 +268,8 @@ class Spectrum:
             EF = self.ef[line]
             NP = self.np[line]
             NF = self.nf[line]
-            metric.append(0 if ((EP + EF) == 0 or (NF + NP) == 0) else (
-                    (EP + NP) / math.sqrt((NF + EF) * (EP + EF) * (NF + NP) * (EP + NP))))
+            metric.append(0 if ((EP + EF) == 0 or (NF + NP) == 0 or (NF + EF) == 0) else (1 if (EP + NP) == 0 else
+                                ((EP + NP) / math.sqrt((NF + EF) * (EP + EF) * (NF + NP) * (EP + NP)))))
         return metric
 
     def m7(self):  # Michael
@@ -564,9 +567,9 @@ class Spectrum:
             EF = self.ef[line]
             NP = self.np[line]
             NF = self.nf[line]
-            metric.append((EF / (sys.float_info.min if ((NF + EF) == 0) else (NF + EF))) /
+            metric.append(0 if (NF + EF) == 0 else 1 if (EP + NP) == 0 else ((EF / (NF + EF)) /
                           (sys.float_info.min if (((EP / (EP + NP)) + (EF / (NF + EF))) == 0)
-                          else ((EP / (EP + NP)) + (EF / (NF + EF)))))
+                          else ((EP / (EP + NP)) + (EF / (NF + EF))))))
 
         return metric
 
@@ -576,8 +579,8 @@ class Spectrum:
             EP = self.ep[line]
             EF = self.ef[line]
             NF = self.nf[line]
-            metric.append(EF / math.sqrt((NF + EF) * ((sys.float_info.min if (EF == 0) else EF) +
-                                                      (sys.float_info.min if (EP == 0) else EP))))
+            metric.append(0 if (NF + EF) == 0 else (EF / math.sqrt((NF + EF) * ((sys.float_info.min if (EF == 0) else EF) +
+                                                      (sys.float_info.min if (EP == 0) else EP)))))
 
         return metric
 

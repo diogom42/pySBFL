@@ -33,7 +33,7 @@ def runList():
     for prog in progList:
         print(prog)
         verList = open(prog + '/versions', 'r').read().splitlines()
-	numTests = len(open(prog + '/universe', 'r').read().splitlines())
+        numTests = len(open(prog + '/universe', 'r').read().splitlines())
     
         for ver in verList:
             matrix = getCovMat(prog, ver, numTests)
